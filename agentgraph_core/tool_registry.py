@@ -2,60 +2,34 @@ from __future__ import annotations
 
 from typing import Callable
 
-from .demo_catalog import TOOLS
 from .models import ToolDefinition, ToolDefinitionRequest, ToolExecution, ToolExecutionRequest, ToolExecutionStatus, ToolRisk, now_iso
 
 ToolHandler = Callable[[dict], dict]
 
 
-def _fetch_sources(payload: dict) -> dict:
-    sources = payload.get("sources") or ["demo://source"]
-    return {"sources": sources, "count": len(sources), "summary": f"Fetched {len(sources)} source(s)."}
-
-
-def _extract_facts(payload: dict) -> dict:
-    return {
-        "candidate_facts": [
-            {
-                "subject": payload.get("subject") or "demo subject",
-                "summary": "Candidate fact extracted by v0 builtin tool.",
-                "confidence": 0.62,
-                "source_count": 1,
-            }
-        ]
-    }
-
-
-def _generate_draft(payload: dict) -> dict:
-    topic = payload.get("topic") or "demo topic"
-    return {"title": f"Draft: {topic}", "status": "draft", "sections": ["context", "evidence", "next action"]}
-
-
-def _publish(payload: dict) -> dict:
-    return {"published": True, "target": payload.get("target") or "demo://publish", "artifact_id": payload.get("artifact_id")}
-
-
-BUILTIN_HANDLERS: dict[str, ToolHandler] = {
-    "crawler.fetch_sources": _fetch_sources,
-    "knowledge.extract_facts": _extract_facts,
-    "draft.generate": _generate_draft,
-    "publisher.publish": _publish,
-}
-
-
 class ToolRegistry:
-    def __init__(self, tools: list[ToolDefinition] = TOOLS, handlers: dict[str, ToolHandler] | None = None, store=None):
+    """Tool definition and execution policy registry.
+
+    Tools and handlers are explicit constructor inputs. Projects can provide their
+    own domain tools while reusing approval, enabled/disabled, execution status,
+    and persistence behavior from the core package.
+    """
+
+    def __init__(self, tools: list[ToolDefinition] | None = None, handlers: dict[str, ToolHandler] | None = None, store=None):
         persisted_tools = store.list_tool_definitions() if store else []
         self._store = store
-        self._tools = {tool.id: tool for tool in tools}
+        self._tools = {tool.id: tool for tool in (tools or [])}
         self._tools.update({tool.id: tool for tool in persisted_tools})
-        self._handlers = handlers or BUILTIN_HANDLERS
+        self._handlers = handlers or {}
 
     def list_tools(self) -> list[ToolDefinition]:
         return list(self._tools.values())
 
     def get_tool(self, tool_id: str) -> ToolDefinition | None:
         return self._tools.get(tool_id)
+
+    def register_handler(self, tool_id: str, handler: ToolHandler) -> None:
+        self._handlers[tool_id] = handler
 
     def upsert_tool(self, request: ToolDefinitionRequest) -> ToolDefinition:
         tool_id = request.id or f"tool-{now_iso().replace(':', '').replace('+', '-')}"
@@ -118,6 +92,8 @@ class ToolRegistry:
         else:
             self.run_execution(execution)
         execution.updated_at = now_iso()
+        if self._store:
+            self._store.save_tool_execution(execution)
         return execution
 
     def run_execution(self, execution: ToolExecution) -> ToolExecution:
@@ -146,4 +122,6 @@ class ToolRegistry:
             execution.status = ToolExecutionStatus.failed
             execution.error = str(exc)
         execution.updated_at = now_iso()
+        if self._store:
+            self._store.save_tool_execution(execution)
         return execution

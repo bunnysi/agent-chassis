@@ -1,4 +1,4 @@
-from agentgraph_core.demo_catalog import GRAPH
+from examples.catalog.demo_catalog import GRAPH
 from agentgraph_core.graph_registry import GraphRuntimeSpec, build_runtime_graph, default_entry_node
 from agentgraph_core.models import AgentRun, RunStatus
 from examples.demo_runtime import NODE_HANDLERS, ROUTE_HANDLERS

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from uuid import uuid4
 
-from .demo_catalog import KNOWLEDGE
 from .models import (
     KnowledgeDecisionRequest,
     KnowledgeEvidence,
@@ -17,10 +16,17 @@ PROMOTE_MIN_EVIDENCE = 2
 
 
 class KnowledgeLedger:
-    """Knowledge ledger policy for candidate -> stable -> rejected flow."""
+    """Policy layer for candidate -> stable -> rejected knowledge flow.
+
+    Seed records are explicit constructor input so the core package does not depend
+    on demo or project-specific knowledge.
+    """
+
+    def __init__(self, seed_records: list[KnowledgeRecord] | None = None) -> None:
+        self._seed_records = list(seed_records or [])
 
     def seed_records(self) -> list[KnowledgeRecord]:
-        return KNOWLEDGE
+        return list(self._seed_records)
 
     def create_candidate(self, request: KnowledgeRecordRequest) -> tuple[KnowledgeRecord, list[KnowledgeEvidence]]:
         record_id = f"kr-{uuid4().hex[:10]}"

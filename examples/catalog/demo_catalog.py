@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .models import (
+from agentgraph_core.models import (
     AgentProfile,
     GraphDefinition,
     GraphEdge,
