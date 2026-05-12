@@ -1,13 +1,13 @@
 # AgentGraph Core
 
-AgentGraph Core is the reusable runtime foundation extracted from `nophp/bot`.
+AgentGraph Core is a small Python runtime foundation for building observable, human-in-the-loop agent systems.
 
-It is intentionally **not** a product UI. It provides shared backend primitives for projects that need transparent agent execution, human review, tool auditing, scheduled runs, and evidence-based knowledge promotion.
+It provides shared backend primitives for projects that need transparent agent execution, tool auditing, scheduled runs, human review, artifact tracking, and evidence-based knowledge promotion.
 
 ## Core idea
 
 ```text
-project UI / API adapter
+application UI / API adapter
   -> agentgraph-core
       -> agent profile
       -> graph definition
@@ -18,17 +18,17 @@ project UI / API adapter
       -> human gate
       -> schedule
       -> knowledge ledger
-  -> project-specific tools and state authority
+  -> application-specific tools and state authority
 ```
 
-Projects keep their own product shape. DotNovel can stay a novel workbench, SOVPS can stay a data/content site, Fenhei can stay a mobile companion app. They reuse the runtime contract, not a forced admin UI.
+Applications keep their own product shape, domain models, and storage authority. AgentGraph Core provides the common runtime contract.
 
 ## Included
 
-- `AgentProfile`: agent identity, responsibility, model, knowledge boundary.
+- `AgentProfile`: agent identity, responsibility, model, and knowledge boundary.
 - `GraphDefinition`: product-visible nodes, edges, and conditional routing contract.
-- `ToolDefinition` / `ToolExecution`: tool registry, enable/disable, risk, approval, execution status.
-- `AgentRun`: lifecycle, current node, heartbeat, retry/failure metadata.
+- `ToolDefinition` / `ToolExecution`: tool registry, enable/disable, risk, approval, and execution status.
+- `AgentRun`: lifecycle, current node, heartbeat, retry, and failure metadata.
 - `AgentEvent`: frontend-visible event stream.
 - `RunArtifact`: index for generated artifacts without forcing large payloads into SQLite.
 - `HumanGateReview`: approve / reject / edit / score / need-more-data gate.
@@ -39,10 +39,10 @@ Projects keep their own product shape. DotNovel can stay a novel workbench, SOVP
 
 ## Excluded
 
-- No Bot Workshop frontend.
-- No DotNovel / SOVPS / Fenhei domain models.
-- No product-specific UI assumptions.
-- No requirement to replace a project's existing file authority or database.
+- No frontend.
+- No product-specific domain models.
+- No product-specific terminology.
+- No requirement to replace an application's existing file authority or database.
 
 ## Install for development
 
@@ -107,27 +107,17 @@ AGENTGRAPH_DB_PATH=/path/to/agentgraph.sqlite3
 
 `SQLiteStore` stores the full run JSON snapshot and mirrors events, artifacts, human decisions, tool executions, knowledge, schedules, and registry definitions into queryable tables.
 
-## Project integration pattern
-
-### Bot Workshop
-
-Bot keeps the generic Workshop UI and uses AgentGraph Core as its runtime foundation.
-
-### DotNovel
-
-DotNovel should keep its novel workbench UI and file authority:
+## Application integration pattern
 
 ```text
-DotNovel UI
-  -> DotNovel API adapter
+application UI
+  -> application API adapter
   -> agentgraph-core run/event/artifact/human-gate/knowledge layer
-  -> Novel runtime tools
-  -> novels/<id>/ files + Honcho memory
+  -> application-specific tools
+  -> application-specific state authority
 ```
 
-### SOVPS
-
-SOVPS can reuse scheduled runs, tool execution logs, and candidate/stable knowledge promotion for vendor, line, IP, evidence, and article workflows.
+Typical integrations keep large generated content, domain state, or external records in their existing storage system, while using AgentGraph Core for operational visibility and control-plane state.
 
 ## Development checks
 
