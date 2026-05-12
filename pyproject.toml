@@ -1,0 +1,23 @@
+[project]
+name = "agentgraph-core"
+version = "0.1.0"
+description = "Reusable AgentGraph runtime primitives: agents, graphs, tools, runs, events, artifacts, human gates, schedules, and knowledge ledger."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "cool", email = "cool@phper.org" }]
+dependencies = [
+  "pydantic>=2.0",
+  "langgraph>=0.2",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
