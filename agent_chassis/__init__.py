@@ -1,4 +1,4 @@
-"""AgentGraph Core: reusable agent run, graph, tool, human-gate, schedule, and knowledge primitives."""
+"""agent-chassis: reusable agent run, graph, tool, human-gate, schedule, and knowledge primitives."""
 
 from .models import *  # noqa: F401,F403
 from .graph_registry import GraphRuntimeSpec, build_runtime_graph, default_entry_node

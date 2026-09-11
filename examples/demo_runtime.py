@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from agentgraph_core.models import (
+from agent_chassis.models import (
     AgentEvent,
     AgentEventType,
     AgentRun,

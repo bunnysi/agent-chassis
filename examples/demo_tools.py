@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from agentgraph_core.models import ToolDefinition, ToolRisk
+from agent_chassis.models import ToolDefinition, ToolRisk
 
 
 def fetch_sources(payload: dict) -> dict:

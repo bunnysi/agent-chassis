@@ -9,11 +9,11 @@ from typing import Iterable
 
 from .models import AgentEvent, AgentProfile, AgentRun, GraphDefinition, HumanDecision, HumanGateReview, HumanGateStatus, KnowledgeEvidence, KnowledgeRecord, KnowledgeStatus, RunArtifact, ScheduledJob, ScheduledJobStatus, ToolDefinition, ToolExecution, now_iso
 
-DEFAULT_DB_PATH = Path(os.getenv("AGENTGRAPH_DB_PATH", "data/agentgraph.sqlite3"))
+DEFAULT_DB_PATH = Path(os.getenv("AGENT_CHASSIS_DB_PATH", "data/agent-chassis.sqlite3"))
 
 
 class SQLiteStore:
-    """SQLite persistence layer for AgentGraph runtime state.
+    """SQLite persistence layer for agent-chassis runtime state.
 
     Stores the full run JSON snapshot so the LangGraph runtime can evolve quickly
     without premature relational schema churn. It also mirrors events, artifacts,

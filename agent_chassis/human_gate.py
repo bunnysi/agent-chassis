@@ -4,7 +4,7 @@ from .models import AgentRun, HumanDecision, HumanGateReview, HumanGateReviewReq
 
 
 class HumanGateRegistry:
-    """Standard human-gate contract for AgentGraph runs.
+    """Standard human-gate contract for agent-chassis runs.
 
     Runtime nodes still decide what the workflow does after a decision; this layer
     standardizes the review payload, allowed actions, status, score, and audit log

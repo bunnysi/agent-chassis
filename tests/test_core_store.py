@@ -1,4 +1,4 @@
-from agentgraph_core import (
+from agent_chassis import (
     AgentRun,
     HumanDecision,
     HumanGateRegistry,
@@ -10,7 +10,7 @@ from agentgraph_core import (
 
 
 def test_store_roundtrip_run(tmp_path):
-    store = SQLiteStore(tmp_path / 'agentgraph.sqlite3')
+    store = SQLiteStore(tmp_path / 'agent-chassis.sqlite3')
     run = AgentRun(agent_id='agent', graph_id='graph', status=RunStatus.running)
     store.save_run(run)
     loaded = store.get_run(run.id)

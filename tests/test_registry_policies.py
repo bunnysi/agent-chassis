@@ -1,7 +1,7 @@
-from agentgraph_core.models import KnowledgeDecisionRequest, ToolDefinition, ToolExecutionRequest, ToolRisk
-from agentgraph_core.tool_registry import ToolRegistry
-from agentgraph_core.knowledge_ledger import KnowledgeLedger
-from agentgraph_core.models import KnowledgeRecordRequest
+from agent_chassis.models import KnowledgeDecisionRequest, ToolDefinition, ToolExecutionRequest, ToolRisk
+from agent_chassis.tool_registry import ToolRegistry
+from agent_chassis.knowledge_ledger import KnowledgeLedger
+from agent_chassis.models import KnowledgeRecordRequest
 
 
 def test_tool_registry_has_no_default_demo_tools():
