@@ -8,3 +8,16 @@ build/
 dist/
 *.egg-info/
 data/*.sqlite3
+
+# household process files — local only (do not push)
+.local/
+AGENTS.md
+CONTRIBUTING.md
+SECURITY.md
+DESIGN.md
+PRODUCT.md
+current.md
+docs/development.md
+docs/release.md
+docs/documentation-ssot.md
+.github/PULL_REQUEST_TEMPLATE.md
