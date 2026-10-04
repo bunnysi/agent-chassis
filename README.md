@@ -21,7 +21,7 @@ The application still owns UI, domain models, and real storage. Node and route h
 ## Quick start
 
 ```bash
-git clone https://github.com/hareai/agent-chassis.git
+git clone https://github.com/hipness/agent-chassis.git
 cd agent-chassis
 python3 -m venv .venv
 source .venv/bin/activate
